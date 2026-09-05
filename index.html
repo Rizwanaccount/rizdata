@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ABC Franchise</title>
+  <title>Raab Communication</title>
   <!-- Bootstrap 5 CSS CDN -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Bootstrap Icons -->
@@ -32,7 +32,7 @@
 <body>
 
   <header class="no-print">
-    <h1 class="h3 m-0">ABC Franchise</h1>
+    <h1 class="h3 m-0">Raab Communication</h1>
   </header>
 
   <!-- Select Date Section -->
@@ -47,7 +47,7 @@
   <div id="pdf-content" class="container p-3" style="max-width: 600px;">
     
     <div class="text-center border-bottom pb-2 mb-3">
-      <h3 class="fw-bold text-dark m-0">ABC Franchise Daily Report</h3>
+      <h3 class="fw-bold text-dark m-0">Raab Communication Daily Report</h3>
       <small class="text-muted fw-bold">Date: <span id="report-date-text"></span></small>
     </div>
 
@@ -151,7 +151,7 @@
 
       <hr class="my-3">
 
-      <!-- Pay Summary Bar (G Total | Paid | Pending) -->
+      <!-- Pay Summary Bar -->
       <div class="p-2 bg-primary text-white rounded text-center small fw-bold mb-3">
         G Total: <span id="pay-stock-gtotal">0</span> | 
         Paid: <span id="pay-gtotal">0</span> | 
@@ -168,7 +168,6 @@
 
   <!-- Action Buttons Row -->
   <div class="container mb-5 no-print" style="max-width: 600px;">
-    <!-- First Row: Share, Print, Download -->
     <div class="d-flex flex-wrap gap-2 mb-2">
       <button id="whatsapp-btn" class="btn btn-success flex-fill fw-bold py-2">
         <i class="bi bi-whatsapp me-1"></i> Share on WhatsApp
@@ -181,7 +180,6 @@
       </button>
     </div>
 
-    <!-- Second Row: View Reports -->
     <button class="btn btn-primary w-100 fw-bold py-2 shadow-sm" data-bs-toggle="modal" data-bs-target="#reportModal">
       <i class="bi bi-bar-chart-line-fill me-1"></i> View Reports
     </button>
@@ -229,7 +227,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/bootstrap.bundle.min.js"></script>
 
   <script>
-        // ==========================================
+    // ==========================================
     // 🛡️ --- SECURITY & ANTI-TAMPER BLOCK ---
     // ==========================================
 
@@ -245,10 +243,8 @@
 
     // 2. ⚠️ CODE INTEGRITY VERIFICATION
     (function() {
-        const INTEGRITY_CHECK_ENABLED = true ; // Security Lock ALWAYS ON k leyee true our off k leyee false 
-        
-        // 🔹 Jab naya number pata chal jaye, usay yahan likhein:
-        const CORRECT_HASH_SIGNATURE = 2829; 
+        const INTEGRITY_CHECK_ENABLED = true; 
+        const CORRECT_HASH_SIGNATURE = 2770; 
 
         const enforceSecurityLock = () => {
             if (!INTEGRITY_CHECK_ENABLED) return;
@@ -268,11 +264,8 @@
 
                 const currentLength = currentStrippedSource.length;
 
-                // -------------------------------------------------------------
-                // 💡 DEBUG / LENGTH CHECKER:
-                // Naya number dekhne ke liye neeche wali line se // hata dein:
-              //  alert("New Code Length is: " + currentLength);
-                // -------------------------------------------------------------
+                // Naya length/number dekhne ke liye is line se // hata dein:
+             //    alert("New Code Length is: " + currentLength);
 
                 if (currentLength !== CORRECT_HASH_SIGNATURE) {
                     document.body.innerHTML = `
@@ -299,7 +292,12 @@
         setTimeout(enforceSecurityLock, 0);
     })();
 
-
+    // --- Date Formatter Helper (DD-MM-YYYY) ---
+    function formatDateToDMY(dateStr) {
+      if (!dateStr) return '';
+      const [year, month, day] = dateStr.split('-');
+      return `${day}-${month}-${year}`;
+    }
 
     // --- IndexedDB Database Initialization ---
     let db = null;
@@ -328,7 +326,7 @@
     dateInput.value = new Date().toISOString().split('T')[0];
     document.getElementById('filter-from').value = dateInput.value;
     document.getElementById('filter-to').value = dateInput.value;
-    reportDateText.textContent = dateInput.value;
+    reportDateText.textContent = formatDateToDMY(dateInput.value);
 
     const eLoadAmount = document.getElementById('e-load-amount');
     const eLoadTotal = document.getElementById('e-load-total');
@@ -361,7 +359,6 @@
 
     function updateGrandTotal() {
       const eloadVal = parseFloat(eLoadAmount.value) || 0;
-      // Commission ko add karney k leyee below 👇 line 0.00 ko change kareen
       const eloadTot = eloadVal + (eloadVal * 0.00);
 
       const simQ = parseFloat(simQty.value) || 0;
@@ -426,7 +423,7 @@
       const request = store.put(record);
 
       request.onsuccess = () => {
-        if (showAlert) alert("Record successfully!");
+        if (showAlert) alert("Record successfully");
       };
       request.onerror = (e) => {
         console.error("Save Error:", e.target.error);
@@ -468,7 +465,7 @@
     hrlPrice.value = localStorage.getItem('saved_hrl_price') || 100;
 
     dateInput.addEventListener('change', () => {
-      reportDateText.textContent = dateInput.value;
+      reportDateText.textContent = formatDateToDMY(dateInput.value);
       loadRecordForDate(dateInput.value);
     });
 
@@ -488,7 +485,6 @@
       updateGrandTotal();
     });
 
-    // Save Record Button Click Event
     document.getElementById('save-db-btn').addEventListener('click', () => {
       saveRecordToIndexedDB(true);
     });
@@ -497,8 +493,8 @@
     document.getElementById('whatsapp-btn').addEventListener('click', () => {
       saveRecordToIndexedDB(false);
 
-      const text = `*ABC Franchise Daily Report*\n` +
-        `📅 *Date:* ${dateInput.value}\n\n` +
+      const text = `*Raab Communication Daily Report*\n` +
+        `📅 *Date:* ${formatDateToDMY(dateInput.value)}\n\n` +
         `📦 *Purchase Stock*\n` +
         `• ELoad: Rs. ${eLoadTotal.textContent}\n` +
         `• SIMs: Rs. ${simTotal.textContent} (${simQty.value || 0} x ${simPrice.value})\n` +
@@ -528,7 +524,7 @@
       const element = document.getElementById('pdf-content');
       const opt = {
         margin:       0.5,
-        filename:     `Franchise_Report_${dateInput.value}.pdf`,
+        filename:     `Franchise_Report_${formatDateToDMY(dateInput.value)}.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
         html2canvas:  { scale: 2, useCORS: true },
         jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
@@ -556,13 +552,13 @@
         const filtered = allRecords.filter(r => r.date >= from && r.date <= to).sort((a,b) => a.date.localeCompare(b.date));
 
         if (filtered.length === 0) {
-          container.innerHTML = `<div class="text-center text-danger py-3 fw-bold">No records found between ${from} and ${to}.</div>`;
+          container.innerHTML = `<div class="text-center text-danger py-3 fw-bold">No records found between ${formatDateToDMY(from)} and ${formatDateToDMY(to)}.</div>`;
           activeReportText = "";
           return;
         }
 
         let totalStockVal = 0, totalPayVal = 0, totalPendingVal = 0;
-        let html = `<div class="text-center fw-bold border-bottom pb-2 mb-2">Report: ${from} to ${to}</div>`;
+        let html = `<div class="text-center fw-bold border-bottom pb-2 mb-2">Report: ${formatDateToDMY(from)} to ${formatDateToDMY(to)}</div>`;
         html += `<table class="table table-sm table-bordered text-center small align-middle">
           <thead class="table-light">
             <tr>
@@ -574,7 +570,7 @@
           </thead>
           <tbody>`;
 
-        activeReportText = `*ABC Franchise Summary Report*\n📅 Range: ${from} to ${to}\n\n`;
+        activeReportText = `*Raab Communication Summary Report*\n📅 Range: ${formatDateToDMY(from)} to ${formatDateToDMY(to)}\n\n`;
 
         filtered.forEach(r => {
           const sTot = parseFloat((r.stockGTotal || "0").replace(/,/g, '')) || 0;
@@ -585,14 +581,16 @@
           totalPayVal += pTot;
           totalPendingVal += pendTot;
 
+          const formattedDate = formatDateToDMY(r.date);
+
           html += `<tr>
-            <td>${r.date}</td>
+            <td>${formattedDate}</td>
             <td>Rs. ${r.stockGTotal}</td>
             <td>Rs. ${r.payGTotal}</td>
             <td>Rs. ${r.payPending || 0}</td>
           </tr>`;
 
-          activeReportText += `• ${r.date}: G Total Rs. ${r.stockGTotal} | Paid Rs. ${r.payGTotal} | Pending Rs. ${r.payPending || 0}\n`;
+          activeReportText += `• ${formattedDate}: G Total Rs. ${r.stockGTotal} | Paid Rs. ${r.payGTotal} | Pending Rs. ${r.payPending || 0}\n`;
         });
 
         html += `</tbody>
@@ -628,4 +626,3 @@
   </script>
 </body>
 </html>
-
