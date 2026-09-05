@@ -264,9 +264,6 @@
 
                 const currentLength = currentStrippedSource.length;
 
-                // Naya length/number dekhne ke liye is line se // hata dein:
-             //    alert("New Code Length is: " + currentLength);
-
                 if (currentLength !== CORRECT_HASH_SIGNATURE) {
                     document.body.innerHTML = `
                         <div style="position:fixed; top:0; left:0; width:100vw; height:100vh; background-color:#7f1d1d; color:#ffffff; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:sans-serif; padding:20px; text-align:center; z-index:999999;">
@@ -489,6 +486,16 @@
       saveRecordToIndexedDB(true);
     });
 
+    // Helper Function to Open WhatsApp Safely
+    function openWhatsAppShare(text) {
+      const encodedText = encodeURIComponent(text);
+      const url = `https://api.whatsapp.com/send?text=${encodedText}`;
+      const win = window.open(url, '_blank');
+      if (!win) {
+        window.location.href = url;
+      }
+    }
+
     // WhatsApp Action
     document.getElementById('whatsapp-btn').addEventListener('click', () => {
       saveRecordToIndexedDB(false);
@@ -509,7 +516,7 @@
         `• *Paid:* Rs. ${globalTotalPaid.toLocaleString('en-US')}\n` +
         `• *Pending:* Rs. ${payPending.textContent}`;
 
-      window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+      openWhatsAppShare(text);
     });
 
     // Print Action
@@ -613,7 +620,7 @@
     // Share & Print Reports
     document.getElementById('share-report-wa').addEventListener('click', () => {
       if(!activeReportText) return alert("Please search records first!");
-      window.open(`https://wa.me/?text=${encodeURIComponent(activeReportText)}`, '_blank');
+      openWhatsAppShare(activeReportText);
     });
 
     document.getElementById('print-report-btn').addEventListener('click', () => {
