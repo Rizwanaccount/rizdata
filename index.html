@@ -423,7 +423,7 @@
       const request = store.put(record);
 
       request.onsuccess = () => {
-        if (showAlert) alert("Record successfully");
+        if (showAlert) alert("Record Saved successfully");
       };
       request.onerror = (e) => {
         console.error("Save Error:", e.target.error);
